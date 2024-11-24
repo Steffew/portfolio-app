@@ -5,6 +5,9 @@
   export let thumbnailUrl = '';
   export let slug = '';
   export let content = '';
+  let isFormValid = false;
+
+  $: isFormValid = title && thumbnailUrl && slug && description && content;
 </script>
 
 <div class="w-full h-full p-8 bg-gray-900 rounded-lg shadow-2xl">
@@ -28,10 +31,10 @@
     </div>
     <div>
       <label for="content" class="block text-sm font-medium text-gray-200 mb-1">Content</label>
-      <Tinymce bind:value={content} class="w-full" />
+      <Tinymce bind:value={content} apiKey="damj8ccb3m3bhtkoeau5n1pcsys6krdsr5yjducx9lnip2tw" class="w-full" />
     </div>
     <div class="flex justify-end mt-8">
-      <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition">Save Project</button>
+      <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition" disabled={!isFormValid}>Save Project</button>
     </div>
   </form>
 </div>
