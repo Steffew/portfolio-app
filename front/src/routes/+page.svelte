@@ -5,7 +5,7 @@
   
   <main>
 	<Nav />
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-4">
 	  <Project
 		title="Emerald"
 		description="A brief description of the project."
