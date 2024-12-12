@@ -2,5 +2,10 @@
   "dependencies": {
     "express": "^4.21.2",
     "mongoose": "^8.8.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.2",
+    "supertest": "^7.0.0"
   }
 }
