@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Nav from '$lib/Nav.svelte';
 	import Project from '$lib/Project.svelte';
+	import { API_BASE_URL } from '$lib/config';
   
 	type ProjectType = {
 	  title: string;
@@ -15,7 +16,7 @@
   
 	async function loadProjects() {
 	  try {
-		const response = await fetch("http://localhost:5000/api/projects");
+		const response = await fetch(`${API_BASE_URL}/api/projects`);
 		if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 		projects = await response.json();
 		errorMessage = null;
