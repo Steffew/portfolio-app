@@ -1,72 +1,54 @@
-<script>
+<script lang="ts">
 	import NavAdmin from '$lib/NavAdmin.svelte';
 	import ProjectAdmin from '$lib/ProjectAdmin.svelte';
+	import { API_BASE_URL } from '$lib/config';
+  
+	type ProjectType = {
+	  title: string;
+	  description: string;
+	  image_url: string;
+	  slug: string;
+	};
+  
+	let projects: ProjectType[] = [];
+	let errorMessage: string | null = null;
+	let isLoading: boolean = true;
+  
+	async function loadProjects() {
+	  try {
+		const response = await fetch(`${API_BASE_URL}/api/projects`);
+		if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+		projects = await response.json();
+		errorMessage = null;
+	  } catch (error: any) {
+		console.error("Failed to load projects:", error.message);
+		errorMessage = "Failed to connect to the database. Please try again later.";
+	  } finally {
+		isLoading = false;
+	  }
+	}
+  
+	loadProjects();
   </script>
   
   <main>
 	<NavAdmin />
-	<div class="mt-4 max-w-4xl mx-auto">
-	  <ProjectAdmin
-		title="Emerald"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Ruby"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Sapphire"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Diamond"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Amethyst"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Topaz"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Opal"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Garnet"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Aquamarine"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	  <ProjectAdmin
-		title="Peridot"
-		description="A brief description of the project."
-		imageUrl="https://t3.ftcdn.net/jpg/03/15/34/90/360_F_315349043_6ohfFyx37AFusCKZtGQtJR0jqUxhb25Y.jpg"
-		link="https://example.com"
-	  />
-	</div>
+	{#if isLoading}
+	  <p class="text-center">Loading projects...</p>
+	{:else if errorMessage}
+	  <p class="text-red-500 text-center">{errorMessage}</p>
+	{:else}
+	  <div class="mt-4 max-w-4xl mx-auto">
+		{#each projects as project}
+		  <ProjectAdmin 
+			title={project.title}
+			description={project.description}
+			imageUrl={project.image_url}
+			link={`/projects/${project.slug}`}
+		  />
+		{/each}
+	  </div>
+	{/if}
   </main>
   
   <style>
