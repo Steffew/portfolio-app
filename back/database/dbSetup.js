@@ -16,7 +16,7 @@ const initializeDatabase = async () => {
 
     const sampleProject = new ProjectInProjectsDb({
       title: "Sample Project",
-      image_url: "https://example.com/sample-image.png",
+      image_url: "https://picsum.photos/720/1280",
       slug: "sample-project",
       description: "This is a sample project description.",
       content: "Detailed content for the sample project.",
