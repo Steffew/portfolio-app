@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Project = require("../models/projectSchema");
 const router = express.Router();
 
-// Get All
+// Get All Projects
 router.get("/", async (req, res) => {
   try {
     const projects = await Project.find();
@@ -13,8 +13,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get
+// Get a Single Project
 router.get("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ error: "Invalid project ID" });
+  }
   try {
     const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ error: "Project not found" });
@@ -24,7 +27,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Create
+// Create a Project
 router.post("/", async (req, res) => {
   try {
     const { title, image_url, slug, description, content } = req.body;
@@ -45,8 +48,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update
+// Update a Project
 router.put("/:id", async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ error: "Invalid project ID" });
+  }
   try {
     const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -58,7 +64,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete
+// Delete a Project
 router.delete("/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     return res.status(400).json({ error: "Invalid project ID" });
