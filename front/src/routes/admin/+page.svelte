@@ -65,7 +65,7 @@
 		<div class="mt-4 max-w-4xl mx-auto">
 			{#each projects as project}
 				<ProjectAdmin 
-					id={project.slug}
+					id={project._id}
 					title={project.title}
 					description={project.description}
 					imageUrl={project.image_url}

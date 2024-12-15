@@ -1,6 +1,7 @@
 import { API_BASE_URL } from '$lib/config';
 
 export type ProjectType = {
+	_id: string;
 	title: string;
 	description: string;
 	image_url: string;
