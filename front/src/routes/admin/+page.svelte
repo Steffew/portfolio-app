@@ -3,6 +3,7 @@
 	import ProjectAdmin from '$lib/ProjectAdmin.svelte';
 	import { fetchProjects, createProject, updateProject, deleteProject } from '$lib/projectService';
 	import type { ProjectType } from '$lib/projectService';
+	import { goto } from '$app/navigation';
 
 	let projects: ProjectType[] = [];
 	let errorMessage: string | null = null;
@@ -71,7 +72,7 @@
 					description={project.description}
 					imageUrl={project.image_url}
 					slug={`/projects/${project.slug}`}
-					on:edit={(event) => handleUpdate(event.detail.id, event.detail)}
+					on:edit={(event) => goto(`/admin/edit/${event.detail.id}`)}
 					on:delete={(event) => handleDelete(event.detail.id)}
 				/>
 			{/each}
