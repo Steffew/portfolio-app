@@ -17,7 +17,7 @@ const initializeDatabase = async () => {
     const sampleProject = new ProjectInProjectsDb({
       title: "Sample Project",
       image_url: "https://picsum.photos/720/1280",
-      slug: "sample-project",
+      slug: new mongoose.Types.ObjectId().toString(),
       description: "This is a sample project description.",
       content: "Detailed content for the sample project.",
     });
