@@ -43,14 +43,15 @@
 	}
 
 	async function handleDelete(id: string) {
-		try {
-			await deleteProject(id);
-			projects = projects.filter((project) => project.slug !== id);
-		} catch (error: any) {
-			console.error("Error deleting project:", error.message);
-			errorMessage = "Failed to delete the project.";
-		}
-	}
+    try {
+        await deleteProject(id);
+        location.reload();
+    } catch (error: any) {
+        console.error("Error deleting project:", error.message);
+        errorMessage = "Failed to delete the project.";
+    }
+}
+
 
 	loadProjects();
 </script>
