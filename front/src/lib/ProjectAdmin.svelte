@@ -6,7 +6,7 @@
   export let title: string;
   export let description: string;
   export let imageUrl: string;
-  export let link: string; // Add this to accept the 'link' prop
+  export let slug: string;
 
   function deleteProject() {
     dispatch("delete", { id });
@@ -27,7 +27,7 @@
   </div>
   <div class="mt-2 flex space-x-2 justify-between">
     <div class="flex space-x-2">
-      <a href={link} class="bg-white bg-opacity-20 text-white px-3 py-1 rounded hover:bg-opacity-40 border border-white border-opacity-50">View</a>
+      <a href={slug} class="bg-white bg-opacity-20 text-white px-3 py-1 rounded hover:bg-opacity-40 border border-white border-opacity-50">View</a>
       <button 
         class="bg-white bg-opacity-20 text-white px-3 py-1 rounded hover:bg-opacity-40 border border-white border-opacity-50"
         on:click={editProject}>

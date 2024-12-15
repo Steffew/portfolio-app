@@ -70,7 +70,7 @@
 					title={project.title}
 					description={project.description}
 					imageUrl={project.image_url}
-					link={`/projects/${project.slug}`}
+					slug={`/projects/${project.slug}`}
 					on:edit={(event) => handleUpdate(event.detail.id, event.detail)}
 					on:delete={(event) => handleDelete(event.detail.id)}
 				/>
