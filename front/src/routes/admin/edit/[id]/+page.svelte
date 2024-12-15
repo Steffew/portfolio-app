@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { get } from 'svelte/store';
+	import { API_BASE_URL } from '$lib/config';
 
   let title = '';
   let description = '';
@@ -18,7 +19,7 @@
       return;
     }
     try {
-      const response = await fetch(`http://localhost:5000/api/projects/${id}`);
+      const response = await fetch(`${API_BASE_URL}/api/projects/${id}`);
       if (!response.ok) throw new Error('Failed to fetch project data');
       const project = await response.json();
 
