@@ -1,47 +1,108 @@
 <script lang="ts">
-  import ProjectForm from '$lib/ProjectForm.svelte';
+  import Tinymce from '@tinymce/tinymce-svelte';
+  import { API_BASE_URL } from '$lib/config';
+  import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { get } from 'svelte/store';
-	import { API_BASE_URL } from '$lib/config';
 
-  let title = '';
-  let description = '';
-  let thumbnailUrl = '';
-  let slug = '';
-  let content = '';
+  export let title: string = '';
+  export let description: string = '';
+  export let thumbnailUrl: string = '';
+  export let slug: string = '';
+  export let content: string = '';
+  export let projectId: string = '';
+
+  let isFormValid: boolean = false;
   let errorMessage: string | null = null;
 
-  onMount(async () => {
-    const id = get(page).params?.id;
-    if (!id) {
-      errorMessage = 'Invalid project ID.';
-      return;
-    }
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/projects/${id}`);
-      if (!response.ok) throw new Error('Failed to fetch project data');
-      const project = await response.json();
+  $: isFormValid = !!(title && thumbnailUrl && slug && description && content);
 
-      title = project.title;
-      description = project.description;
-      thumbnailUrl = project.image_url;
-      slug = project.slug;
-      content = project.content;
-    } catch (error) {
-      errorMessage = 'Unable to load project data.';
+  onMount(async () => {
+    if (!projectId) {
+      const id = get(page).params?.id;
+      if (!id) {
+        errorMessage = 'Invalid project ID.';
+        return;
+      }
+      projectId = id;
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/projects/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch project data');
+        const project = await response.json();
+
+        title = project.title;
+        description = project.description;
+        thumbnailUrl = project.image_url;
+        slug = project.slug;
+        content = project.content;
+      } catch (error) {
+        errorMessage = 'Unable to load project data.';
+      }
     }
   });
+
+  async function handleSave(e: Event) {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/projects/${projectId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          image_url: thumbnailUrl,
+          slug,
+          content,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update project');
+      }
+
+      goto('/admin');
+    } catch (error) {
+      errorMessage = 'An error occurred while updating the project.';
+    }
+  }
 </script>
 
-{#if errorMessage}
-  <p class="text-red-500 text-center">{errorMessage}</p>
-{:else}
-  <ProjectForm
-    {title}
-    {description}
-    {thumbnailUrl}
-    {slug}
-    {content}
-  />
-{/if}
+<div class="w-full h-full p-8 bg-gray-900 rounded-lg shadow-2xl">
+  <h1 class="text-2xl font-bold text-white mb-6 text-center">{title ? `${title}` : 'Edit Project'}</h1>
+  <form class="space-y-6" on:submit={handleSave}>
+    <div>
+      <label for="title" class="block text-sm font-medium text-gray-200 mb-1">Title</label>
+      <input id="title" type="text" bind:value={title} class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" />
+    </div>
+    <div>
+      <label for="thumbnailUrl" class="block text-sm font-medium text-gray-200 mb-1">Thumbnail URL</label>
+      <input id="thumbnailUrl" type="text" bind:value={thumbnailUrl} class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" />
+    </div>
+    <div>
+      <label for="slug" class="block text-sm font-medium text-gray-200 mb-1">Slug</label>
+      <input id="slug" type="text" bind:value={slug} class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" />
+    </div>
+    <div>
+      <label for="description" class="block text-sm font-medium text-gray-200 mb-1">Description</label>
+      <textarea id="description" bind:value={description} class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600 resize-none" rows="1"></textarea>
+    </div>
+    <div>
+      <label for="content" class="block text-sm font-medium text-gray-200 mb-1">Content</label>
+      <Tinymce bind:value={content} apiKey="damj8ccb3m3bhtkoeau5n1pcsys6krdsr5yjducx9lnip2tw" class="w-full" />
+    </div>
+    {#if errorMessage}
+      <p class="text-red-500 text-sm">{errorMessage}</p>
+    {/if}
+    <div class="flex justify-end mt-8">
+      <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition" disabled={!isFormValid}>
+        Save Project
+      </button>
+    </div>
+  </form>
+</div>
+
+<style>
+</style>

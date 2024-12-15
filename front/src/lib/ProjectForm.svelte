@@ -1,18 +1,57 @@
-<script>
+<script lang="ts">
   import Tinymce from '@tinymce/tinymce-svelte';
-  export let title = '';
-  export let description = '';
-  export let thumbnailUrl = '';
-  export let slug = '';
-  export let content = '';
-  let isFormValid = false;
+  import { API_BASE_URL } from '$lib/config';
+  import { goto } from '$app/navigation';
 
-  $: isFormValid = title && thumbnailUrl && slug && description && content;
+  export let title: string = '';
+  export let description: string = '';
+  export let thumbnailUrl: string = '';
+  export let slug: string = '';
+  export let content: string = '';
+  export let projectId: string = ''; // Pass project ID explicitly
+
+  let isFormValid: boolean = false;
+  let errorMessage: string | null = null;
+
+  // Explicitly check form validity
+  $: isFormValid = !!(title && thumbnailUrl && slug && description && content);
+
+  async function handleSave(e: Event) {
+    e.preventDefault();
+    try {
+      if (!projectId) throw new Error('Missing project ID');
+
+      const response = await fetch(`${API_BASE_URL}/api/projects/${projectId}`, {
+        method: 'PUT', // Use ID to update the existing project
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          image_url: thumbnailUrl,
+          slug, // Allow updating slug
+          content,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.text(); // Handle HTML errors
+        throw new Error(errorResponse || 'Failed to update project');
+      }
+      
+      // Redirect to admin page after successful update
+      goto('/admin');
+    } catch (error: unknown) {
+      errorMessage = 'An error occurred while updating the project. Ensure the project ID and payload are correct.';
+      console.error('Error:', error);
+    }
+  }
 </script>
 
 <div class="w-full h-full p-8 bg-gray-900 rounded-lg shadow-2xl">
-  <h1 class="text-2xl font-bold text-white mb-6 text-center">{title ? `${title}` : 'Create New Project'}</h1>
-  <form class="space-y-6">
+  <h1 class="text-2xl font-bold text-white mb-6 text-center">{title ? `${title}` : 'Edit Project'}</h1>
+  <form class="space-y-6" on:submit={handleSave}>
     <div>
       <label for="title" class="block text-sm font-medium text-gray-200 mb-1">Title</label>
       <input id="title" type="text" bind:value={title} class="w-full p-2 rounded bg-gray-800 text-white border border-gray-600" />
@@ -33,8 +72,13 @@
       <label for="content" class="block text-sm font-medium text-gray-200 mb-1">Content</label>
       <Tinymce bind:value={content} apiKey="damj8ccb3m3bhtkoeau5n1pcsys6krdsr5yjducx9lnip2tw" class="w-full" />
     </div>
+    {#if errorMessage}
+      <p class="text-red-500 text-sm">{errorMessage}</p>
+    {/if}
     <div class="flex justify-end mt-8">
-      <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition" disabled={!isFormValid}>Save Project</button>
+      <button type="submit" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition" disabled={!isFormValid}>
+        Save Project
+      </button>
     </div>
   </form>
 </div>
