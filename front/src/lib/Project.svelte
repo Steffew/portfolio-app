@@ -1,23 +1,28 @@
 <script>
-    export let title;
-    export let description;
-    export let imageUrl;
-    export let link;
-  </script>
-  
-  <a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="relative bg-black bg-opacity-50 border border-white border-opacity-20 rounded-lg shadow-md overflow-hidden transition-transform transform hover:shadow-lg w-auto m-1 group"
-  >
-    <img src={imageUrl} alt={title} class="w-full h-64 object-cover transition-transform transform group-hover:scale-110 duration-500 ease-out" />
-    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent h-2/3 flex flex-col justify-end">
-      <h2 class="text-xl font-bold text-white">{title}</h2>
-      <p class="text-sm text-gray-300">{description}</p>
-    </div>
-  </a>
-  
-  <style>
-  </style>
-  
+	export let title;
+	export let description;
+	export let imageUrl;
+	export let link;
+</script>
+
+<a
+	href={link}
+	target="_blank"
+	rel="noopener noreferrer"
+	class="group relative m-1 w-auto transform overflow-hidden rounded-lg border border-white border-opacity-20 bg-black bg-opacity-50 shadow-md transition-transform hover:shadow-lg"
+>
+	<img
+		src={imageUrl}
+		alt={title}
+		class="h-64 w-full transform object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+	/>
+	<div
+		class="absolute bottom-0 left-0 right-0 flex h-2/3 flex-col justify-end bg-gradient-to-t from-black to-transparent p-4"
+	>
+		<h2 class="text-xl font-bold text-white">{title}</h2>
+		<p class="text-sm text-gray-300">{description}</p>
+	</div>
+</a>
+
+<style>
+</style>

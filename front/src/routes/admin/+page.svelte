@@ -14,8 +14,8 @@
 			projects = await fetchProjects();
 			errorMessage = null;
 		} catch (error: any) {
-			console.error("Failed to load projects:", error.message);
-			errorMessage = "Failed to connect to the database. Please try again later.";
+			console.error('Failed to load projects:', error.message);
+			errorMessage = 'Failed to connect to the database. Please try again later.';
 		} finally {
 			isLoading = false;
 		}
@@ -26,33 +26,30 @@
 			const createdProject = await createProject(newProject);
 			projects = [...projects, createdProject];
 		} catch (error: any) {
-			console.error("Error creating project:", error.message);
-			errorMessage = "Failed to create a new project.";
+			console.error('Error creating project:', error.message);
+			errorMessage = 'Failed to create a new project.';
 		}
 	}
 
 	async function handleUpdate(id: string, updatedData: Partial<ProjectType>) {
 		try {
 			const updatedProject = await updateProject(id, updatedData);
-			projects = projects.map((project) =>
-				project.slug === id ? updatedProject : project
-			);
+			projects = projects.map((project) => (project.slug === id ? updatedProject : project));
 		} catch (error: any) {
-			console.error("Error updating project:", error.message);
-			errorMessage = "Failed to update the project.";
+			console.error('Error updating project:', error.message);
+			errorMessage = 'Failed to update the project.';
 		}
 	}
 
 	async function handleDelete(id: string) {
-    try {
-        await deleteProject(id);
-        location.reload();
-    } catch (error: any) {
-        console.error("Error deleting project:", error.message);
-        errorMessage = "Failed to delete the project.";
-    }
-}
-
+		try {
+			await deleteProject(id);
+			location.reload();
+		} catch (error: any) {
+			console.error('Error deleting project:', error.message);
+			errorMessage = 'Failed to delete the project.';
+		}
+	}
 
 	loadProjects();
 </script>
@@ -62,11 +59,11 @@
 	{#if isLoading}
 		<p class="text-center">Loading projects...</p>
 	{:else if errorMessage}
-		<p class="text-red-500 text-center">{errorMessage}</p>
+		<p class="text-center text-red-500">{errorMessage}</p>
 	{:else}
-		<div class="mt-4 max-w-4xl mx-auto">
+		<div class="mx-auto mt-4 max-w-4xl">
 			{#each projects as project}
-				<ProjectAdmin 
+				<ProjectAdmin
 					id={project._id}
 					title={project.title}
 					description={project.description}
