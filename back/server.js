@@ -12,7 +12,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use("/api/projects", projectRoutes); // Prefix all project routes with /api/projects
+app.use("/api/projects", projectRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => {
