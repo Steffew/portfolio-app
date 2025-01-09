@@ -69,8 +69,7 @@ Feel free to edit these values directly in the `docker-compose.yml` file if need
 
 ---
 
-##📄 Information
-
+## 📄 Information
 This project is open-source, so feel free to modify, improve, or customize it as needed for your own projects!
 
 This project does not have any authentication, but you can easily implement one yourself based on your requirements.
@@ -79,4 +78,6 @@ This project is open-source, so feel free to modify, improve, or customize it as
 ---
 
 ✅ **You're all set!** Clone the repo, run the stack, and start showcasing your work! 🚀
+
+
 
