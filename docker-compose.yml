@@ -23,19 +23,8 @@ services:
       - MONGO_AUTH_DB=admin
     depends_on:
       - mongo
-
-  db_setup:
-    build:
-      context: ./back
-    command: ["node", "database/dbSetup.js"]
-    depends_on:
-      - mongo
-    restart: "no"
-    environment:
-      - MONGO_DB=portfolio
-      - MONGO_USER=admin
-      - MONGO_PASSWORD=adminpassword
-      - MONGO_AUTH_DB=admin
+    command: >
+      sh -c "node database/dbSetup.js && node server.js"
 
   mongo:
     image: mongo
