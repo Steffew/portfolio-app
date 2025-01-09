@@ -1,5 +1,5 @@
 # Build Stage: Build the static site
-FROM node:18 AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 
 # Install dependencies and build the static site
@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 # Serve Stage: Serve the static files with a lightweight server
-FROM node:18 AS serve
+FROM node:20-alpine AS serve
 WORKDIR /app
 RUN npm install -g serve
 
